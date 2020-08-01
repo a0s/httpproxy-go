@@ -26,57 +26,57 @@ Library has two significant structs: Proxy and Context.
 // http.Handler interface for ListenAndServe function. If you need, you must
 // set Proxy struct before handling requests.
 type Proxy struct {
-	// Session number of last proxy request.
-	SessionNo int64
-
-	// RoundTripper interface to obtain remote response.
-	// By default, it uses &http.Transport{}.
-	Rt http.RoundTripper
-
-	// Certificate key pair.
-	Ca tls.Certificate
-
-	// User data to use free.
-	UserData interface{}
-
-	// Error callback.
-	OnError func(ctx *Context, where string, err *Error, opErr error)
-
-	// Accept callback. It greets proxy request like ServeHTTP function of
-	// http.Handler.
-	// If it returns true, stops processing proxy request.
-	OnAccept func(ctx *Context, w http.ResponseWriter, r *http.Request) bool
-
-	// Auth callback. If you need authentication, set this callback.
-	// If it returns true, authentication succeeded.
-	OnAuth func(ctx *Context, authType string, user string, pass string) bool
-
-	// Connect callback. It sets connect action and new host.
-	// If len(newhost) > 0, host changes.
-	OnConnect func(ctx *Context, host string) (ConnectAction ConnectAction,
-		newHost string)
-
-	// Request callback. It greets remote request.
-	// If it returns non-nil response, stops processing remote request.
-	OnRequest func(ctx *Context, req *http.Request) (resp *http.Response)
-
-	// Response callback. It greets remote response.
-	// Remote response sends after this callback.
-	OnResponse func(ctx *Context, req *http.Request, resp *http.Response)
-
-	// If ConnectAction is ConnectMitm, it sets chunked to Transfer-Encoding.
-	// By default, true.
-	MitmChunked bool
-
-	// HTTP Authentication type. If it's not specified (""), uses "Basic".
-	// By default, "".
-	AuthType string
-
+    // Session number of last proxy request.
+    SessionNo int64
+    
+    // RoundTripper interface to obtain remote response.
+    // By default, it uses &http.Transport{}.
+    Rt http.RoundTripper
+    
+    // Certificate key pair.
+    Ca tls.Certificate
+    
+    // User data to use free.
+    UserData interface{}
+    
+    // Error callback.
+    OnError func(ctx *Context, where string, err *Error, opErr error)
+    
+    // Accept callback. It greets proxy request like ServeHTTP function of
+    // http.Handler.
+    // If it returns true, stops processing proxy request.
+    OnAccept func(ctx *Context, w http.ResponseWriter, r *http.Request) bool
+    
+    // Auth callback. If you need authentication, set this callback.
+    // If it returns true, authentication succeeded.
+    OnAuth func(ctx *Context, authType string, user string, pass string) bool
+    
+    // Connect callback. It sets connect action and new host.
+    // If len(newhost) > 0, host changes.
+    OnConnect func(ctx *Context, host string) (ConnectAction ConnectAction,
+        newHost string)
+    
+    // Request callback. It greets remote request.
+    // If it returns non-nil response, stops processing remote request.
+    OnRequest func(ctx *Context, req *http.Request) (resp *http.Response)
+    
+    // Response callback. It greets remote response.
+    // Remote response sends after this callback.
+    OnResponse func(ctx *Context, req *http.Request, resp *http.Response)
+    
+    // If ConnectAction is ConnectMitm, it sets chunked to Transfer-Encoding.
+    // By default, true.
+    MitmChunked bool
+    
+    // HTTP Authentication type. If it's not specified (""), uses "Basic".
+    // By default, "".
+    AuthType string
+    
     // Enable proxy for HTTP
     HttpEnabled  bool
-
-	// Enable proxy for HTTPS
-	HttpsEnabled bool
+    
+    // Enable proxy for HTTPS
+    HttpsEnabled bool
 }
 ```
 
@@ -85,34 +85,34 @@ type Proxy struct {
 ```go
 // Context keeps context of each proxy request.
 type Context struct {
-	// Pointer of Proxy struct handled this context.
-	// It's using internally. Don't change in Context struct!
-	Prx *Proxy
-
-	// Session number of this context obtained from Proxy struct.
-	SessionNo int64
-
-	// Sub session number of processing remote connection.
-	SubSessionNo int64
-
-	// Original Proxy request.
-	// It's using internally. Don't change in Context struct!
-	Req *http.Request
-
-	// Original Proxy request, if proxy request method is CONNECT.
-	// It's using internally. Don't change in Context struct!
-	ConnectReq *http.Request
-
-	// Action of after the CONNECT, if proxy request method is CONNECT.
-	// It's using internally. Don't change in Context struct!
-	ConnectAction ConnectAction
-
-	// Remote host, if proxy request method is CONNECT.
-	// It's using internally. Don't change in Context struct!
-	ConnectHost string
-
-	// User data to use free.
-	UserData interface{}
+    // Pointer of Proxy struct handled this context.
+    // It's using internally. Don't change in Context struct!
+    Prx *Proxy
+    
+    // Session number of this context obtained from Proxy struct.
+    SessionNo int64
+    
+    // Sub session number of processing remote connection.
+    SubSessionNo int64
+    
+    // Original Proxy request.
+    // It's using internally. Don't change in Context struct!
+    Req *http.Request
+    
+    // Original Proxy request, if proxy request method is CONNECT.
+    // It's using internally. Don't change in Context struct!
+    ConnectReq *http.Request
+    
+    // Action of after the CONNECT, if proxy request method is CONNECT.
+    // It's using internally. Don't change in Context struct!
+    ConnectAction ConnectAction
+    
+    // Remote host, if proxy request method is CONNECT.
+    // It's using internally. Don't change in Context struct!
+    ConnectHost string
+    
+    // User data to use free.
+    UserData interface{}
 }
 ```
 
