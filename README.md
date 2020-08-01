@@ -187,8 +187,8 @@ func main() {
 	prx.OnRequest = OnRequest
 	prx.OnResponse = OnResponse
 
+	prx.HttpsEnabled = true
     prx.HttpEnabled = true
-    prx.HttpsEnabled = true
 
 	// Listen...
 	http.ListenAndServe(":8080", prx)
