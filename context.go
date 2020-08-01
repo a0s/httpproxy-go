@@ -118,6 +118,17 @@ func (ctx *Context) doAccept(w http.ResponseWriter, r *http.Request) bool {
 	return false
 }
 
+func (ctx *Context) doCheckProtocol(w http.ResponseWriter, r *http.Request) bool {
+	if (r.Method == "CONNECT" && ctx.Prx.HttpsEnabled != true) ||
+		(r.Method != "CONNECT" && ctx.Prx.HttpEnabled != true) {
+		w.WriteHeader(http.StatusBadGateway)
+		w.Write([]byte("502 Bad Gateway"))
+		return true
+	}
+
+	return false
+}
+
 func (ctx *Context) doAuth(w http.ResponseWriter, r *http.Request) bool {
 	if r.Method != "CONNECT" && !r.URL.IsAbs() {
 		return false

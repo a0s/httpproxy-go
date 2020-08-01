@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-httpproxy/httpproxy"
+	"github.com/a0s/httpproxy-go"
 )
 
 func OnError(ctx *httpproxy.Context, where string,
@@ -17,7 +17,7 @@ func OnAccept(ctx *httpproxy.Context, w http.ResponseWriter,
 	r *http.Request) bool {
 	// Handle local request has path "/info"
 	if r.Method == "GET" && !r.URL.IsAbs() && r.URL.Path == "/info" {
-		w.Write([]byte("This is go-httpproxy."))
+		w.Write([]byte("This is httpproxy-go."))
 		return true
 	}
 	return false
@@ -46,8 +46,8 @@ func OnRequest(ctx *httpproxy.Context, req *http.Request) (
 
 func OnResponse(ctx *httpproxy.Context, req *http.Request,
 	resp *http.Response) {
-	// Add header "Via: go-httpproxy".
-	resp.Header.Add("Via", "go-httpproxy")
+	// Add header "Via: httpproxy-go".
+	resp.Header.Add("Via", "httpproxy-go")
 }
 
 func main() {

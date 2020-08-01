@@ -57,6 +57,9 @@ type Proxy struct {
 	AuthType string
 
 	signer *CaSigner
+
+	HttpEnabled  bool
+	HttpsEnabled bool
 }
 
 // NewProxy returns a new Proxy has default CA certificate and key.
@@ -102,6 +105,10 @@ func (prx *Proxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	if ctx.doAccept(w, r) {
+		return
+	}
+
+	if ctx.doCheckProtocol(w, r) {
 		return
 	}
 
