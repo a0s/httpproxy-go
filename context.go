@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/base64"
+	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -119,10 +120,15 @@ func (ctx *Context) doAccept(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (ctx *Context) doCheckProtocol(w http.ResponseWriter, r *http.Request) bool {
-	if (r.Method == "CONNECT" && ctx.Prx.HttpsEnabled != true) ||
-		(r.Method != "CONNECT" && ctx.Prx.HttpEnabled != true) {
+	if r.Method == "CONNECT" && ctx.Prx.HttpsEnabled != true {
 		w.WriteHeader(http.StatusBadGateway)
-		w.Write([]byte("502 Bad Gateway"))
+		w.Write([]byte("502 Bad Gateway / received CONNECT but HTTPS-proxy is disabled"))
+		return true
+	}
+
+	if r.Method != "CONNECT" && ctx.Prx.HttpEnabled != true {
+		w.WriteHeader(http.StatusBadGateway)
+		w.Write([]byte(fmt.Sprintf("502 Bad Gateway / received %s but HTTP-proxy is disabled", r.Method)))
 		return true
 	}
 
